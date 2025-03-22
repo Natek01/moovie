@@ -14,20 +14,42 @@ const API_OPTIONS = {
 }
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [movieList, setMovieList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-// using useEffect to fetch data from the API.
+// using useEffect hook to fetch data from the API.
 
   const fetchMovies = async () => {
+
+    setIsLoading(true);
+    setErrorMessage("");
+
     try {
       const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
 
       const response = await fetch(endpoint, API_OPTIONS)
-      alert(response);
+      
+      if(!response.ok) {
+        throw new Error ("Error fetching movies");
+      }
+
+      const data = await response.json();
+      
+      if(data.Response === "False") {
+        setErrorMessage(data.Error || "Error fetching movies");
+        setMovieList([]);
+        return;
+      }
+
+      setMovieList(data.results || []);
+      setIsLoading(false);
 
     } catch(err) {
       console.log(err);
-      setErrorMessage(err.message);
+      setErrorMessage("Error fetching movies");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -46,9 +68,22 @@ const App = () => {
         <Search  searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       </header>
 
+
+
       <section className="all-movies">
         <h1>All Movies</h1>
-        {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+        
+        {isLoading ? (
+          <p className="text-white">Loading...</p>
+        ) : errorMessage ? (
+          <p className="text-red-500">{errorMessage}</p>
+        ) : (
+         <ul>
+          {movieList.map((movie) => (
+            <p className="text-white">{movie.title}</p>
+          ))}
+         </ul>
+        )}
       </section>
 
 
@@ -61,3 +96,4 @@ const App = () => {
 }
 
 export default App
+
