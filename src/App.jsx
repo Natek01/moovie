@@ -16,6 +16,9 @@ const API_OPTIONS = {
     Authorization: `Bearer ${API_KEY}`
   }
 }
+
+
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [movieList, setMovieList] = useState([]);
@@ -25,7 +28,7 @@ const App = () => {
 
 
   useDebounce(() => {
-    setDebouncedSearchTerm(searchTerm);
+    setDebouncedSearchTerm(searchTerm.trim());
   },500,[searchTerm])  // using useDebounce hook to debounce the search term.
 
 // using useEffect hook to fetch data from the API.
@@ -46,14 +49,14 @@ const App = () => {
 
       const data = await response.json();
       console.log(data);
-      if(data.Response === "False") {
-        setErrorMessage(data.Error || "Error fetching movies");
-        setMovieList([]);
-        return;
-      }
+     if(!data.results || data.results.length === 0){
+      setErrorMessage("No movies found");
+      setMovieList([])
+      return;
+     }
 
       setMovieList(data.results || []);
-      setIsLoading(false);
+     
 
     } catch(err) {
       console.log(err);
