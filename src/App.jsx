@@ -1,8 +1,9 @@
 import {useState, useEffect} from "react";
 import { useDebounce } from "react-use";
-import Search from "./components/Search"
+
 import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
+import SearchMovie from "./components/SearchMovie";
 
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
@@ -75,7 +76,7 @@ const App = () => {
       <header>
         <img src="/hero.png" alt="hero background" />
         <h1>Find <span className="text-gradient">Movies</span>You'll Enjoy Without The Hussle.</h1>
-        <Search  searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+        <SearchMovie  searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       </header>
 
 

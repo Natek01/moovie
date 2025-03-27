@@ -1,6 +1,4 @@
-import React from 'react'
-
-const Search = ({searchTerm, setSearchTerm}) => {
+const SearchMovie = ({searchTerm, setSearchTerm}) => {
   return (
    <div className="search">
     
@@ -19,4 +17,4 @@ const Search = ({searchTerm, setSearchTerm}) => {
   )
 }
 
-export default Search;
+export default SearchMovie;
